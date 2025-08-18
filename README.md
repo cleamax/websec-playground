@@ -59,7 +59,7 @@ websec-playground/
 
 1. **Clone repo & install dependencies**
    ```bash
-   git clone https://github.com/<your-username>/websec-playground.git
+   git clone https://github.com/cleamax/websec-playground.git
    cd websec-playground
    python -m venv .venv && source .venv/bin/activate  # Windows: .venv\Scripts\activate
    pip install -r requirements.txt
