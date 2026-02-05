@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Login</h1>
+
+  <p><strong>Note:</strong> This login is intentionally vulnerable to SQL Injection.</p>
+
+  {% if error %}
+    <div class="error">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" class="card">
+    <label>
+      Username
+      <input name="username" autocomplete="off" />
+    </label>
+
+    <label>
+      Password
+      <input name="password" type="password" autocomplete="off" />
+    </label>
+
+    <button type="submit">Sign in</button>
+  </form>
+
+  <h2>Demo users</h2>
+  <ul>
+    <li><code>alice</code> / <code>password123</code></li>
+    <li><code>bob</code> / <code>password123</code></li>
+  </ul>
+
+  <h2>SQLi example</h2>
+  <p>Try:</p>
+  <ul>
+    <li>username: <code>' OR '1'='1</code></li>
+    <li>password: <code>anything</code></li>
+  </ul>
+{% endblock %}
+
