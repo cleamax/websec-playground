@@ -9,9 +9,12 @@
   <body>
     <header class="nav">
       <div class="brand"><a href="{{ url_for('index') }}">WebSec Playground</a></div>
+
       <nav class="links">
         <a href="{{ url_for('index') }}">Home</a>
         <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('profile') }}">Profile</a>
+        <a href="{{ url_for('comments') }}">Comments</a>
         <a href="{{ url_for('logout') }}">Logout</a>
       </nav>
     </header>

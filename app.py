@@ -70,6 +70,68 @@ def logout():
     return redirect(url_for("index"))
 
 
+@app.route("/profile")
+def profile():
+    """
+    INTENTIONALLY VULNERABLE: IDOR
+    Missing authorization checks. Any logged-in user can access any profile by changing ?id=
+    Example: /profile?id=2
+    """
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    requested_id = request.args.get("id", "")
+    if not requested_id:
+        requested_id = str(session["user_id"])  # default: own profile
+
+    db = get_db()
+    user = db.execute(
+        "SELECT id, username, email FROM users WHERE id = ?",
+        (requested_id,),
+    ).fetchone()
+
+    if not user:
+        return "User not found", 404
+
+    return render_template("profile.html", user=user, requested_id=requested_id)
+
+
+@app.route("/comments", methods=["GET", "POST"])
+def comments():
+    """
+    INTENTIONALLY VULNERABLE: Stored XSS
+    - Stores user-provided comment content
+    - Renders it back unsafely (see template using |safe)
+    """
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    db = get_db()
+    user = current_user()
+
+    if request.method == "POST":
+        content = request.form.get("content", "")
+
+        # ❌ Vulnerable on purpose: store raw input without sanitization
+        db.execute(
+            "INSERT INTO comments (user_id, content) VALUES (?, ?)",
+            (user["id"], content),
+        )
+        db.commit()
+        return redirect(url_for("comments"))
+
+    rows = db.execute(
+        """
+        SELECT c.id, c.content, c.user_id, u.username
+        FROM comments c
+        JOIN users u ON u.id = c.user_id
+        ORDER BY c.id DESC
+        """
+    ).fetchall()
+
+    return render_template("comments.html", user=user, comments=rows)
+
+
 if __name__ == "__main__":
     # Debug on purpose (local lab only)
     app.run(debug=True)

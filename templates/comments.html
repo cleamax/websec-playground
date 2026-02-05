@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Comments</h1>
+
+  <p><strong>Note:</strong> This page is intentionally vulnerable to <strong>Stored XSS</strong>.</p>
+
+  <form method="post" class="card">
+    <label>
+      New comment
+      <textarea name="content" rows="4" style="width:100%; margin-top:6px; padding:10px; box-sizing:border-box;"></textarea>
+    </label>
+    <button type="submit">Post</button>
+  </form>
+
+  <hr />
+
+  <h2>Example payload</h2>
+  <p>Try posting this:</p>
+  <div class="card">
+    <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code>
+  </div>
+
+  <hr />
+
+  <h2>Recent comments</h2>
+
+  {% if comments|length == 0 %}
+    <p>No comments yet.</p>
+  {% else %}
+    {% for c in comments %}
+      <div class="card" style="margin-bottom:12px;">
+        <p><strong>{{ c["username"] }}</strong> (user_id={{ c["user_id"] }})</p>
+
+        <!-- ❌ Vulnerable on purpose: render stored content as HTML -->
+        <div>{{ c["content"] | safe }}</div>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endblock %}

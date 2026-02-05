@@ -6,6 +6,10 @@
   {% if user %}
     <p>You are logged in as <strong>{{ user["username"] }}</strong>.</p>
     <p>Email: {{ user["email"] }}</p>
+    <p>
+      <a href="{{ url_for('profile') }}">Profile</a> ·
+      <a href="{{ url_for('comments') }}">Comments</a>
+    </p>
   {% else %}
     <p>You are not logged in.</p>
     <p><a href="{{ url_for('login') }}">Go to login</a></p>
@@ -17,6 +21,9 @@
   <p>This application is intentionally insecure and intended for local practice only.</p>
   <ul>
     <li>SQL Injection in <code>/login</code></li>
-    <li>More endpoints will be added next (IDOR, XSS, CSRF)</li>
+    <li>IDOR in <code>/profile?id=...</code></li>
+    <li>Stored XSS in <code>/comments</code></li>
+    <li>Next: CSRF in <code>/settings</code></li>
   </ul>
 {% endblock %}
+
