@@ -65,55 +65,131 @@ websec-playground/
 ```
 
 --- 
-Getting Started
-1) Clone the repository and install dependencies
-<pre><code> git clone https://github.com/cleamax/websec-playground.git cd websec-playground python -m venv .venv # macOS / Linux source .venv/bin/activate # Windows (PowerShell) # .venv\Scripts\Activate.ps1 pip install -r requirements.txt </code></pre>
-2) Initialize the database
-<pre><code> python db_init.py </code></pre>
-3) Run the application
-<pre><code> python app.py </code></pre>
+## Getting Started
 
-The application will be available at:
+---
+
+### 1) Clone the repository and install dependencies
+
+<pre><code>
+git clone https://github.com/cleamax/websec-playground.git
+cd websec-playground
+
+python -m venv .venv
+# macOS / Linux
+source .venv/bin/activate
+# Windows (PowerShell)
+# .venv\Scripts\Activate.ps1
+
+pip install -r requirements.txt
+</code></pre>
+
+---
+
+### 2) Initialize the database
+
+<pre><code>
+python db_init.py
+</code></pre>
+
+---
+
+### 3) Run the application
+
+<pre><code>
+python app.py
+</code></pre>
+
+The application will be available at:  
 http://127.0.0.1:5000
 
-Example Attack Scenarios
+---
 
-The following examples illustrate the intended learning surface.
-Use only in local or isolated lab environments.
+## Example Attack Scenarios
 
-SQL Injection (SQLi)
-<pre><code> username: ' OR '1'='1 password: any </code></pre>
-Insecure Direct Object Reference (IDOR)
-<pre><code> /profile?id=2 </code></pre>
-Stored Cross-Site Scripting (XSS)
-<pre><code> &lt;script&gt;alert('XSS')&lt;/script&gt; </code></pre>
-Cross-Site Request Forgery (CSRF)
+---
 
-Forge a malicious form that submits a state-changing request without the user’s consent.
+The following examples illustrate the intended learning surface.  
+Use **only in local or isolated lab environments**.
 
-CI / Security Scanning
+---
 
-This repository includes a GitHub Actions workflow that runs Semgrep:
+### SQL Injection (SQLi)
 
-Static Application Security Testing (SAST)
+<pre><code>
+username: ' OR '1'='1
+password: any
+</code></pre>
 
-OWASP Top 10 rule detection
+---
 
-SARIF output in the GitHub Security tab
+### Insecure Direct Object Reference (IDOR)
 
-Optional extension: OWASP ZAP Baseline for DAST.
+<pre><code>
+/profile?id=2
+</code></pre>
 
-Security Notice
+---
 
-This project is intentionally insecure.
+### Stored Cross-Site Scripting (XSS)
 
-Do not expose it to the public internet
+<pre><code>
+&lt;script&gt;alert('XSS')&lt;/script&gt;
+</code></pre>
 
-Run only locally or in isolated environments
+---
 
-Use strictly for educational and research purposes
+### Cross-Site Request Forgery (CSRF)
 
-License
+Forge a malicious form that submits a state-changing request  
+(e.g. email update) without the user’s consent.
 
-MIT License
+---
+
+## CI / Security Scanning
+
+---
+
+This repository includes a **GitHub Actions** workflow that runs **Semgrep**:
+
+- Static Application Security Testing (SAST)
+- Detection of common OWASP Top 10 vulnerability patterns
+- SARIF output integrated into the GitHub Security tab
+
+Optional extension: **OWASP ZAP Baseline** for DAST.
+
+---
+
+## Recommended Learning Workflow
+
+---
+
+1. Explore the application and identify vulnerabilities  
+2. Exploit the issues to understand their impact  
+3. Apply mitigations in a dedicated `secure` or `fix` branch:
+   - Parameterized SQL queries  
+   - Proper authorization checks  
+   - Output encoding and input validation  
+   - CSRF protection mechanisms  
+4. Re-run CI and verify that findings are reduced or eliminated  
+
+---
+
+## Security Notice
+
+---
+
+This project is **intentionally insecure**.
+
+- Do **not** deploy or expose it to the public internet  
+- Run only in local or isolated environments  
+- Use strictly for **educational and research purposes**
+
+---
+
+## License
+
+---
+
+MIT License  
 Created by Max Richter
