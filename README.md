@@ -65,26 +65,13 @@ websec-playground/
 ```
 
 --- 
-
 Getting Started
 1) Clone the repository and install dependencies
-git clone https://github.com/cleamax/websec-playground.git
-cd websec-playground
-
-python -m venv .venv
-# macOS / Linux
-source .venv/bin/activate
-# Windows (PowerShell)
-# .venv\Scripts\Activate.ps1
-
-pip install -r requirements.txt
-
+<pre><code> git clone https://github.com/cleamax/websec-playground.git cd websec-playground python -m venv .venv # macOS / Linux source .venv/bin/activate # Windows (PowerShell) # .venv\Scripts\Activate.ps1 pip install -r requirements.txt </code></pre>
 2) Initialize the database
-python db_init.py
-
+<pre><code> python db_init.py </code></pre>
 3) Run the application
-python app.py
-
+<pre><code> python app.py </code></pre>
 
 The application will be available at:
 http://127.0.0.1:5000
@@ -95,70 +82,38 @@ The following examples illustrate the intended learning surface.
 Use only in local or isolated lab environments.
 
 SQL Injection (SQLi)
-username: ' OR '1'='1
-password: any
-
+<pre><code> username: ' OR '1'='1 password: any </code></pre>
 Insecure Direct Object Reference (IDOR)
-
-Access another user’s profile by modifying the query parameter:
-
-/profile?id=2
-
+<pre><code> /profile?id=2 </code></pre>
 Stored Cross-Site Scripting (XSS)
-<script>alert('XSS')</script>
-
+<pre><code> &lt;script&gt;alert('XSS')&lt;/script&gt; </code></pre>
 Cross-Site Request Forgery (CSRF)
 
-Forge a malicious form that submits a state-changing request
-(e.g. an email update) without the user’s consent.
+Forge a malicious form that submits a state-changing request without the user’s consent.
 
 CI / Security Scanning
 
-This repository includes a GitHub Actions workflow that runs Semgrep
-on each push and pull request:
+This repository includes a GitHub Actions workflow that runs Semgrep:
 
 Static Application Security Testing (SAST)
 
-Detection of common OWASP Top 10 vulnerability patterns
+OWASP Top 10 rule detection
 
-SARIF output integrated into the GitHub Security tab
+SARIF output in the GitHub Security tab
 
-Optional extension: integrate OWASP ZAP Baseline for automated
-Dynamic Application Security Testing (DAST).
-
-Recommended Learning Workflow
-
-Explore the application and identify vulnerabilities
-
-Exploit the issues to understand their impact
-
-Apply mitigations in a dedicated secure or fix branch:
-
-Parameterized SQL queries
-
-Proper authorization checks
-
-Output encoding and input validation
-
-CSRF protection mechanisms
-
-Re-run CI and verify that findings are reduced or eliminated
+Optional extension: OWASP ZAP Baseline for DAST.
 
 Security Notice
 
 This project is intentionally insecure.
 
-Do not deploy or expose it to the public internet
+Do not expose it to the public internet
 
-Run only in local or isolated environments
+Run only locally or in isolated environments
 
 Use strictly for educational and research purposes
 
 License
 
-MIT License.
-
+MIT License
 Created by Max Richter
-.
-
-
