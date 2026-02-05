@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Profile</h1>
+
+  <p><strong>Note:</strong> This endpoint is intentionally vulnerable to IDOR.</p>
+
+  <div class="card">
+    <p><strong>ID:</strong> {{ user["id"] }}</p>
+    <p><strong>Username:</strong> {{ user["username"] }}</p>
+    <p><strong>Email:</strong> {{ user["email"] }}</p>
+  </div>
+
+  <hr />
+
+  <h2>Try IDOR</h2>
+  <p>Change the query parameter to access other users:</p>
+
+  <ul>
+    <li><a href="/profile?id=1">/profile?id=1</a></li>
+    <li><a href="/profile?id=2">/profile?id=2</a></li>
+  </ul>
+
+  <p>Currently requested id: <code>{{ requested_id }}</code></p>
+{% endblock %}
