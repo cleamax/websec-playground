@@ -1,5 +1,7 @@
 # WebSec Playground
 
+![Semgrep SAST](https://github.com/cleamax/websec-playground/actions/workflows/semgrep.yml/badge.svg)
+
 A deliberately vulnerable **Flask-based web application** for hands-on learning of **web application security** concepts such as SQL Injection, XSS, CSRF, and IDOR.
 
 > **Educational use only.** This project is intentionally insecure and must not be deployed to production environments.
