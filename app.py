@@ -132,6 +132,37 @@ def comments():
     return render_template("comments.html", user=user, comments=rows)
 
 
+@app.route("/settings", methods=["GET", "POST"])
+def settings():
+    """
+    INTENTIONALLY VULNERABLE: CSRF
+    This endpoint changes state (email update) without CSRF protection.
+    No CSRF token, no Origin/Referer validation.
+    """
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    db = get_db()
+    user = current_user()
+    message = None
+
+    if request.method == "POST":
+        new_email = request.form.get("email", "")
+
+        # ❌ Vulnerable on purpose: state-changing action without CSRF token/checks
+        db.execute(
+            "UPDATE users SET email = ? WHERE id = ?",
+            (new_email, user["id"]),
+        )
+        db.commit()
+        message = "Email updated (intentionally without CSRF protection)."
+
+        # refresh user info for display
+        user = current_user()
+
+    return render_template("settings.html", user=user, message=message)
+
+
 if __name__ == "__main__":
     # Debug on purpose (local lab only)
     app.run(debug=True)

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Settings</h1>
+
+  <p><strong>Note:</strong> This page is intentionally vulnerable to <strong>CSRF</strong>.</p>
+  <p>The email update below is a state-changing action performed without CSRF protection.</p>
+
+  {% if message %}
+    <div class="card" style="margin-bottom:12px;">
+      {{ message }}
+    </div>
+  {% endif %}
+
+  <div class="card">
+    <p><strong>Current user:</strong> {{ user["username"] }} (id={{ user["id"] }})</p>
+    <p><strong>Current email:</strong> {{ user["email"] }}</p>
+  </div>
+
+  <hr />
+
+  <form method="post" class="card">
+    <label>
+      New email
+      <input name="email" value="{{ user['email'] }}" />
+    </label>
+
+    <!-- ❌ Vulnerable on purpose: no CSRF token -->
+    <button type="submit">Update email</button>
+  </form>
+
+  <hr />
+
+  <h2>CSRF demo idea</h2>
+  <p>
+    A malicious site could auto-submit a hidden form to <code>/settings</code>
+    while the victim is logged in.
+  </p>
+{% endblock %}
