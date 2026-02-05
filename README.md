@@ -1,137 +1,164 @@
-# 🔓 WebSec Playground
+# WebSec Playground
 
-A deliberately vulnerable **Flask web application** to practice **Web Application Security** concepts (SQL Injection, XSS, CSRF, IDOR).  
-⚠️ **For educational purposes only. Do not deploy to production.**
+A deliberately vulnerable **Flask-based web application** for hands-on learning of **web application security** concepts such as SQL Injection, XSS, CSRF, and IDOR.
 
----
-
-## 🎯 Purpose
-
-This project is designed as a **hands-on security lab** for students, security enthusiasts, and developers who want to:
-
-- Understand and exploit common **OWASP Top 10 vulnerabilities**  
-- Learn how insecure coding patterns lead to real-world attacks  
-- Practice **secure coding** by fixing the vulnerable endpoints  
-- See how **DevSecOps tools** (Semgrep, ZAP) can be integrated into CI/CD  
+> **Educational use only.** This project is intentionally insecure and must not be deployed to production environments.
 
 ---
 
-## 🕹️ Features & Vulnerabilities
+## Overview
 
-The app contains **4 main vulnerabilities**:
+WebSec Playground is a local security lab designed to help developers and security practitioners:
 
-1. **SQL Injection (SQLi)** – insecure login form using string concatenation  
-2. **Insecure Direct Object Reference (IDOR)** – profile endpoint with missing authorization check  
-3. **Stored Cross-Site Scripting (XSS)** – comments section without sanitization  
-4. **Cross-Site Request Forgery (CSRF)** – missing CSRF tokens on email update form  
+- Understand common **OWASP Top 10** vulnerabilities
+- Observe how insecure coding patterns lead to real-world exploits
+- Practice **secure coding** by mitigating vulnerabilities
+- Learn how **DevSecOps tooling** (SAST/DAST) integrates into CI pipelines
 
-Each vulnerability comes with:
-- Example exploit scenario  
-- Hints in the UI  
-- Possibility to later implement a secure fix  
+The project emphasizes both **offensive understanding** and **defensive remediation**, reflecting real-world security engineering workflows.
 
 ---
 
-## 🛠️ Tech Stack
+## Included Vulnerabilities
 
-- **Backend:** Python 3.11, Flask, SQLite  
-- **Frontend:** Jinja2 templates, basic HTML/CSS  
-- **CI/CD:** GitHub Actions + Semgrep (SAST)  
-- *(optional extension)*: OWASP ZAP Baseline (DAST)  
+The application intentionally includes the following vulnerability classes:
+
+1. **SQL Injection (SQLi)**  
+   Insecure authentication logic using string-concatenated SQL queries.
+
+2. **Insecure Direct Object Reference (IDOR)**  
+   Missing authorization checks on user profile access.
+
+3. **Stored Cross-Site Scripting (XSS)**  
+   Unsanitized user input rendered in comment functionality.
+
+4. **Cross-Site Request Forgery (CSRF)**  
+   State-changing request without CSRF protection.
+
+Each vulnerability is:
+- Reproducible via basic interaction
+- Accompanied by contextual hints
+- Intended to be fixed as part of the learning process
 
 ---
 
-## 📂 Project Structure
+## Technology Stack
 
-```
+- **Backend:** Python 3.11, Flask, SQLite
+- **Frontend:** Jinja2 templates, HTML/CSS
+- **Security Tooling:**
+  - Semgrep (SAST) via GitHub Actions
+  - Optional: OWASP ZAP Baseline (DAST)
+
+---
+
+## Project Structure
+
+```text
 websec-playground/
-├─ app.py                # Flask app (vulnerable)
-├─ db_init.py            # Initialize DB with demo users + seed data
-├─ requirements.txt      # Python dependencies
-├─ templates/            # HTML templates (deliberately unsafe rendering)
-├─ static/               # CSS
-└─ .github/workflows/    # CI configs (Semgrep)
+├── app.py                # Vulnerable Flask application
+├── db_init.py            # Database initialization and seed data
+├── requirements.txt      # Python dependencies
+├── templates/            # HTML templates (intentionally unsafe)
+├── static/               # Static assets (CSS)
+└── .github/workflows/    # CI configuration (Semgrep)
 ```
 
----
+--- 
 
-## ▶️ Getting Started
+Getting Started
+1) Clone the repository and install dependencies
+git clone https://github.com/cleamax/websec-playground.git
+cd websec-playground
 
-1. **Clone repo & install dependencies**
-   ```bash
-   git clone https://github.com/cleamax/websec-playground.git
-   cd websec-playground
-   python -m venv .venv && source .venv/bin/activate  # Windows: .venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
+python -m venv .venv
+# macOS / Linux
+source .venv/bin/activate
+# Windows (PowerShell)
+# .venv\Scripts\Activate.ps1
 
-2. **Initialize the database**
-   ```bash
-   python db_init.py
-   ```
+pip install -r requirements.txt
 
-3. **Run the app**
-   ```bash
-   python app.py
-   ```
-   → Visit: http://127.0.0.1:5000
+2) Initialize the database
+python db_init.py
 
----
+3) Run the application
+python app.py
 
-## 🧨 Example Exploits
 
-- **SQL Injection:**  
-  Login with  
-  ```
-  username: ' OR '1'='1
-  password: anything
-  ```
-- **IDOR:**  
-  Access `/profile?id=2` to view another user's data.  
-- **Stored XSS:**  
-  Post a comment with:  
-  ```html
-  <script>alert('XSS')</script>
-  ```
-- **CSRF:**  
-  Forge a hidden form that auto-submits a new email without the user’s consent.
+The application will be available at:
+http://127.0.0.1:5000
 
----
+Example Attack Scenarios
 
-## 🔍 CI/CD Integration
+The following examples illustrate the intended learning surface.
+Use only in local or isolated lab environments.
 
-This repo includes a **GitHub Actions workflow** that runs [Semgrep](https://semgrep.dev/) against the codebase on each push/PR:
+SQL Injection (SQLi)
+username: ' OR '1'='1
+password: any
 
-- Detects OWASP Top 10 issues  
-- Uploads results as SARIF → GitHub Security tab  
+Insecure Direct Object Reference (IDOR)
 
-*Optional:* Add [OWASP ZAP Baseline](https://www.zaproxy.org/docs/docker/baseline-scan/) for automated DAST scanning.
+Access another user’s profile by modifying the query parameter:
 
----
+/profile?id=2
 
-## 🧑‍💻 Learning Path
+Stored Cross-Site Scripting (XSS)
+<script>alert('XSS')</script>
 
-1. Explore & exploit the vulnerable endpoints  
-2. Switch to a `fix/secure` branch and apply mitigations:
-   - Use **parameterized queries** for SQL  
-   - Implement **authorization checks** for profiles  
-   - Encode/escape user input to prevent XSS  
-   - Add **CSRF protection** (Flask-WTF or custom tokens)  
-3. Run CI again and confirm vulnerabilities are detected/mitigated  
+Cross-Site Request Forgery (CSRF)
 
----
+Forge a malicious form that submits a state-changing request
+(e.g. an email update) without the user’s consent.
 
-## ⚠️ Disclaimer
+CI / Security Scanning
 
-This application is **intentionally insecure**.  
-- Do **NOT** expose it to the internet.  
-- Run locally or in isolated lab environments only.  
-- For **legal & educational use only**.  
+This repository includes a GitHub Actions workflow that runs Semgrep
+on each push and pull request:
 
----
+Static Application Security Testing (SAST)
 
-## 📜 License
+Detection of common OWASP Top 10 vulnerability patterns
 
-MIT – Use, modify, and share for educational purposes.  
-Attribution appreciated: Created by [Max Richter](https://github.com/cleamax).
+SARIF output integrated into the GitHub Security tab
+
+Optional extension: integrate OWASP ZAP Baseline for automated
+Dynamic Application Security Testing (DAST).
+
+Recommended Learning Workflow
+
+Explore the application and identify vulnerabilities
+
+Exploit the issues to understand their impact
+
+Apply mitigations in a dedicated secure or fix branch:
+
+Parameterized SQL queries
+
+Proper authorization checks
+
+Output encoding and input validation
+
+CSRF protection mechanisms
+
+Re-run CI and verify that findings are reduced or eliminated
+
+Security Notice
+
+This project is intentionally insecure.
+
+Do not deploy or expose it to the public internet
+
+Run only in local or isolated environments
+
+Use strictly for educational and research purposes
+
+License
+
+MIT License.
+
+Created by Max Richter
+.
+
 
