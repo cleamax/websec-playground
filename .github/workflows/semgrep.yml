@@ -2,6 +2,7 @@ name: Semgrep SAST
 
 on:
   push:
+    branches: [ "main" ]
   pull_request:
 
 permissions:
@@ -15,13 +16,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run Semgrep (auto rules)
+      # Run Semgrep but do NOT fail the job on findings (this is a vuln playground)
+      - name: Run Semgrep (OWASP Top 10)
+        id: semgrep
         uses: returntocorp/semgrep-action@v1
+        continue-on-error: true
         with:
           config: "p/owasp-top-ten"
           generateSarif: "1"
 
+      # Always try to upload SARIF (even if Semgrep found issues / exited non-zero)
       - name: Upload SARIF to GitHub Security
+        if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: semgrep.sarif
